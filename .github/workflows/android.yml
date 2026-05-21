@@ -14,9 +14,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y \
@@ -29,6 +29,13 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install buildozer cython
+
+      - name: Accept Android licenses
+        run: |
+          mkdir -p $HOME/.android
+          touch $HOME/.android/repositories.cfg
+          yes | buildozer android update || true
+          yes | buildozer android debug || true
 
       - name: Build APK
         run: |
